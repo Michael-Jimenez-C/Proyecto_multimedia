@@ -8,9 +8,10 @@ public class Camara : MonoBehaviour
     public float sensitivityx = 50;
     public float sensitivityy = 120;
     public float xRotacion;
-    public GameObject camera;
+    public Camera playerCamera;
     private void Start()
     {
+        playerCamera = GetComponentInChildren<Camera>();
     }
     void Update()
     {
@@ -21,6 +22,6 @@ public class Camara : MonoBehaviour
         xRotacion = Mathf.Clamp(xRotacion, -90, 90);
         
         transform.Rotate(Vector3.up * mouseX * Time.deltaTime);
-        camera.transform.localEulerAngles = Vector3.right * xRotacion;
+        playerCamera.transform.localEulerAngles = Vector3.right * xRotacion;
     }
 }
