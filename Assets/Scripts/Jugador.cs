@@ -1,83 +1,78 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Jugador : MonoBehaviour
 {
-    Rigidbody rb;
-    public float walkSpeed = 6f;
-    public float runSpeed = 8f;
-    public float currentSpeed = 0f;
-    public float jumpForce = 0.9f;
-    private bool grounded = true;
-    private float velocidadVertical = 0f;
-    public float gravedad = 1.24f;
-    public bool climbing = false;
+	public CharacterController playerCharacterController;
+	float groundOffset = 0.1f;
+	float baseSpeed = 6f;
+	public float runSpeedMultiplier = 1.8f;
+	float baseJumpSpeed = 10f;
+	public float jumpSpeedMultiplier = 1f;
+	public float gravityMultiplier = 1f;
+	public bool grounded = false;
 
-    public CharacterController playerControl;
-    
-    
-    void Start()
-    {
-	rb = GetComponent<Rigidbody>();
-	playerControl = GetComponent<CharacterController>();
-	Cursor.lockState = CursorLockMode.Locked;
-    }
-	
-    void Mover(){
-	currentSpeed = walkSpeed;
-    	float x = Input.GetAxis("Horizontal");
-	float z = Input.GetAxis("Vertical");
-
-	Vector3 move = transform.right * x + transform.forward * z + transform.up * velocidadVertical;
-	if (Input.GetButton("Fire3")){
-		currentSpeed = runSpeed;
+	Vector3 playerVelocity;
+	void Start()
+	{
+		playerCharacterController = GetComponent<CharacterController>();
+		StartCoroutine(GroundDetection());
+		playerVelocity = Vector3.zero;
 	}
+	void Update()
+	{
+		//Movimiento Horizontal
+		float movementAxisX = Input.GetAxis("Horizontal");
+		float movementAxisZ = Input.GetAxis("Vertical");
+		if (Input.GetKey(KeyCode.LeftShift) && movementAxisZ > 0)
+		{
+			movementAxisZ *= runSpeedMultiplier;
+		}
+		float vSpeed = playerVelocity.y;
+		playerVelocity = transform.right * movementAxisX + transform.forward * movementAxisZ;
+		playerVelocity *= baseSpeed;
+		playerVelocity.y = vSpeed;
 
-	playerControl.Move(move * currentSpeed * Time.deltaTime);
-    }
-	
-    void Escalar(){
-    	currentSpeed = walkSpeed*.6f;
-	float z = Input.GetAxis("Vertical");
+		//Movimiento Vertical
+		if (grounded)
+		{
+			if (Input.GetKey(KeyCode.Space))
+			{
+				transform.position += Vector3.up * (groundOffset + 0.1f);
+				grounded = false;
+				playerVelocity.y = baseJumpSpeed * jumpSpeedMultiplier;
+			}
+			else
+			{
+				playerVelocity.y = 0;
+			}
+		}
+		else
+		{
+			playerVelocity += Physics.gravity * gravityMultiplier * 0.05f;
+		}
 
-	Vector3 move = transform.up * z;
-	playerControl.Move(move * currentSpeed * Time.deltaTime);
-    }
-    void Jump(){
-	    if (grounded && Input.GetButtonDown("Jump")){
-		grounded = false;
-	    	velocidadVertical = jumpForce;
-	    }
-	    velocidadVertical -= gravedad * Time.deltaTime;
-	    if (velocidadVertical <=-2f){
-	    	velocidadVertical = -2f;
-	    }
-    }
-
-    void OnTriggerEnter(Collider collider){
-	if(collider.CompareTag("Floor") && !grounded){
-		grounded = true;
-		climbing = false;
-	}else if(collider.CompareTag("Trampoline")){
-		grounded = false;
-		velocidadVertical = jumpForce*2;
+		//Aplica movimiento
+		playerCharacterController.Move(playerVelocity * Time.deltaTime);
 	}
-	
-	Debug.Log("a");
-	if(collider.CompareTag("MuroEscalable") && Input.GetButtonDown("Fire3")){
-		Debug.Log("b");
-		climbing = true;
+	IEnumerator GroundDetection()
+	{
+		while (true)
+		{
+			Vector3 footPosition = transform.position - Vector3.up * (playerCharacterController.height / 2);
+			RaycastHit groundHit;
+			if (Physics.Raycast(footPosition, -Vector3.up, out groundHit, groundOffset) && groundHit.transform.tag == "Floor")
+			{
+				grounded = true;
+			}
+			else
+			{
+				grounded = false;
+			}
+			yield return new WaitForSeconds(0.1f);
+		}
 	}
-
-    }
-    
-    void Update(){
-	    if (!climbing){
-		Mover();
-		Jump();
-	    }else{
-	    	Escalar();
-	    }
-    }
 }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
  
@@ -7,30 +6,34 @@ public class maze_generator : MonoBehaviour
     //Obtiene el prefab del nodo
     [SerializeField] maze_node nodePrefab;
     //Tamano del laberinto
-    [SerializeField] Vector2Int mazeSize;
+    public Vector2Int mazeSize;
+    //Nodo meta
+    public maze_node goalNode;
+    //Evento para detecctar cuando el laberinto se ha generado
+    public bool MazeGenerationCompleted = false;
+    private List<maze_node> nodes;
 
     private void Start()
     {
         //Generacion del laberinto
-        StartCoroutine(GenerateMaze(mazeSize));
+        GenerateMaze(mazeSize);
     }
 
-    IEnumerator GenerateMaze(Vector2Int size)
+    void GenerateMaze(Vector2Int size)
     {
         //Lista de nodos
-        List<maze_node> nodes = new List<maze_node>();
+        nodes = new List<maze_node>();
         //Genera una matriz de nodos de tamano nxn
         for (int x = 0; x < size.x; x++)
         {
             for (int y = 0; y < size.y; y++)
             {
                 //Posicion del nodo
-                Vector3 nodePos = new Vector3(x - (size.x / 2f), 0, y - (size.y / 2f));
+                Vector3 nodePos = new Vector3( 4*x - (size.x / 2f), transform.position.y, 4*y - (size.y / 2f));
                 //Instancia del nodo
                 maze_node newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
                 //Agrega el nodo a la lista
                 nodes.Add(newNode);
-                yield return null;
             }
         }
 
@@ -41,8 +44,7 @@ public class maze_generator : MonoBehaviour
  
         //El camino empieza desde un nodo al azar
         currentPath.Add(nodes[Random.Range(0, nodes.Count)]);
-        //Cambia el estado del primer nodo a "Current"
-        currentPath[0].SetState(NodeState.Current);
+        goalNode = currentPath[0];
  
         //Mientras todos los nodos no hayan sido visitados sigue generando camino:
         while (completedNodes.Count < nodes.Count)
@@ -132,18 +134,17 @@ public class maze_generator : MonoBehaviour
                 }
                 //Agrega el nodo elgido al camino actual
                 currentPath.Add(chosenNode);
-                chosenNode.SetState(NodeState.Current);
             }
             //Si no quedan caminos posibles retrocede
             else
             {
                 completedNodes.Add(currentPath[currentPath.Count-1]);
-                currentPath[currentPath.Count-1].SetState(NodeState.Completed);
                 currentPath.RemoveAt(currentPath.Count-1);
-
             }
-
-            yield return null;
         }
+        MazeGenerationCompleted = true;
+    }
+    public maze_node GetRandomNode (){
+        return nodes[Random.Range(0, nodes.Count)];
     }
 }

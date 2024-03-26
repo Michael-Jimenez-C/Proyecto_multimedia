@@ -15,7 +15,11 @@ public class maze_node : MonoBehaviour
     [SerializeField] GameObject[] walls;
     //Suelo del nodo
     [SerializeField] MeshRenderer floor;
-    
+    //Elimina suelo
+    public void RemoveFloor(){
+        Destroy(floor.gameObject);
+    }
+    //Elimina muros del nodo
     public void RemoveWall(int wallToRemove)
     {
         Destroy(walls[wallToRemove].gameObject);
