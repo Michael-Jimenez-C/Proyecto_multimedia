@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Camara : MonoBehaviour
 {
-    
     public float sensityivity = 1f;
     public CharacterController playerCharacterController;
     float cameraVerticalRotation = 0f;
@@ -13,11 +10,7 @@ public class Camara : MonoBehaviour
     void Start()
     {
         playerCharacterController = GetComponentInParent<CharacterController>();
-        Cursor.visible = false;
-        if (lockedCursor)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        HideCursor();
     }
 
     // Update is called once per frame
@@ -25,10 +18,22 @@ public class Camara : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
-
         cameraVerticalRotation -= mouseY * sensityivity * 100 * Time.deltaTime;
         cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90f, 90f);
         transform.localEulerAngles = Vector3.right * cameraVerticalRotation;
         playerCharacterController.transform.Rotate(Vector3.up * mouseX);
+    }
+
+    public void HideCursor()
+    {
+        lockedCursor = true;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    public void ShowCursor()
+    {
+        lockedCursor = false;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 }
