@@ -3,21 +3,16 @@ using UnityEngine.SceneManagement;
 
 public class menuActions : MonoBehaviour
 {
-    Jugador player;
+    GameObject player;
     void Start()
     {
-        player = GameObject.FindWithTag("Player").GetComponent<Jugador>();
-        player.gravityMultiplier = 0;
+        player = GameObject.FindWithTag("Player");
+        player.GetComponent<Jugador>().gravityMultiplier = 0;
+        player.GetComponent<playerUIController>().HideHUD();
+        player.GetComponent<playerUIController>().HideMenu();
         player.GetComponentInChildren<Camera>().GetComponent<Camara>().ShowCursor();
         GameObject.Find("SettingsMenu")?.SetActive(false);
 
-    }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            GameObject.Find("SettingsMenu")?.SetActive(false);
-        }
     }
     public void CloseGame()
     {
@@ -31,9 +26,15 @@ public class menuActions : MonoBehaviour
         }
     }
 
-    public void NewGame(){
+    public void NewGame()
+    {
         SceneManager.LoadScene("Maze3x3");
-        player.gravityMultiplier = 1;
+        player.GetComponent<Jugador>().gravityMultiplier = 1;
         player.GetComponentInChildren<Camera>().GetComponent<Camara>().HideCursor();
+        player.GetComponent<playerUIController>().ShowHUD();
+    }
+    public void ViewSettings()
+    {
+        player.GetComponent<playerUIController>().ShowSettings();
     }
 }

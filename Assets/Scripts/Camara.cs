@@ -5,7 +5,6 @@ public class Camara : MonoBehaviour
     public float sensityivity = 1f;
     public CharacterController playerCharacterController;
     float cameraVerticalRotation = 0f;
-    bool lockedCursor = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,13 +25,11 @@ public class Camara : MonoBehaviour
 
     public void HideCursor()
     {
-        lockedCursor = true;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
     public void ShowCursor()
     {
-        lockedCursor = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
     }
