@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuActions : MonoBehaviour
+public class menuActions : MonoBehaviour
 {
     Jugador player;
     void Start()
@@ -33,5 +33,7 @@ public class MenuActions : MonoBehaviour
 
     public void NewGame(){
         SceneManager.LoadScene("Maze3x3");
+        player.gravityMultiplier = 1;
+        player.GetComponentInChildren<Camera>().GetComponent<Camara>().HideCursor();
     }
 }

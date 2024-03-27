@@ -64,9 +64,13 @@ public class Jugador : MonoBehaviour
 		{
 			Vector3 footPosition = transform.position - Vector3.up * (playerCharacterController.height / 2);
 			RaycastHit groundHit;
-			if (Physics.Raycast(footPosition, -Vector3.up, out groundHit, groundOffset) && groundHit.transform.tag == "Floor")
+			if (Physics.Raycast(footPosition, -Vector3.up, out groundHit, groundOffset))
 			{
-				grounded = true;
+				if (groundHit.transform.tag == "Floor"){
+					grounded = true;
+				} else{
+					//Debug.Log(groundHit.transform.tag);
+				}
 			}
 			else
 			{

@@ -1,17 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
  
-public class maze_generator : MonoBehaviour
+public class mazeGenerator : MonoBehaviour
 {
     //Obtiene el prefab del nodo
-    [SerializeField] maze_node nodePrefab;
+    [SerializeField] mazeNode nodePrefab;
     //Tamano del laberinto
     public Vector2Int mazeSize;
     //Nodo meta
-    public maze_node goalNode;
+    public mazeNode goalNode;
     //Evento para detecctar cuando el laberinto se ha generado
     public bool MazeGenerationCompleted = false;
-    private List<maze_node> nodes;
+    private List<mazeNode> nodes;
 
     private void Start()
     {
@@ -22,7 +22,7 @@ public class maze_generator : MonoBehaviour
     void GenerateMaze(Vector2Int size)
     {
         //Lista de nodos
-        nodes = new List<maze_node>();
+        nodes = new List<mazeNode>();
         //Genera una matriz de nodos de tamano nxn
         for (int x = 0; x < size.x; x++)
         {
@@ -31,16 +31,16 @@ public class maze_generator : MonoBehaviour
                 //Posicion del nodo
                 Vector3 nodePos = new Vector3( 4*x - (size.x / 2f), transform.position.y, 4*y - (size.y / 2f));
                 //Instancia del nodo
-                maze_node newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
+                mazeNode newNode = Instantiate(nodePrefab, nodePos, Quaternion.identity, transform);
                 //Agrega el nodo a la lista
                 nodes.Add(newNode);
             }
         }
 
         //Lista de nodos que componen el camino actual
-        List<maze_node> currentPath = new List<maze_node>();
+        List<mazeNode> currentPath = new List<mazeNode>();
         //Lista de nodos ya visitados
-        List<maze_node> completedNodes = new List<maze_node>();
+        List<mazeNode> completedNodes = new List<mazeNode>();
  
         //El camino empieza desde un nodo al azar
         currentPath.Add(nodes[Random.Range(0, nodes.Count)]);
@@ -108,7 +108,7 @@ public class maze_generator : MonoBehaviour
             if (posibleDirections.Count > 0)
             {
                 int chosenDirection = Random.Range(0, posibleDirections.Count);
-                maze_node chosenNode = nodes[posibleNextNodes[chosenDirection]];
+                mazeNode chosenNode = nodes[posibleNextNodes[chosenDirection]];
                 
                 //Elimina los muros entre los nodos actual y siguiente
                 //Direcciones: 1=derecha, 2=izquierda, 3=arriba, 4=abajo
@@ -144,7 +144,7 @@ public class maze_generator : MonoBehaviour
         }
         MazeGenerationCompleted = true;
     }
-    public maze_node GetRandomNode (){
+    public mazeNode GetRandomNode (){
         return nodes[Random.Range(0, nodes.Count)];
     }
 }

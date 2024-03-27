@@ -9,7 +9,7 @@ public enum NodeState {
     Completed
 }
  
-public class maze_node : MonoBehaviour
+public class mazeNode : MonoBehaviour
 {
     //Lista de muros del nodo
     [SerializeField] GameObject[] walls;
