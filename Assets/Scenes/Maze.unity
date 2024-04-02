@@ -201,11 +201,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1859625954534075390, guid: 8b17ff37c9fa1a543b53a604dcde27c1, type: 3}
       propertyPath: mazeSize.x
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1859625954534075390, guid: 8b17ff37c9fa1a543b53a604dcde27c1, type: 3}
       propertyPath: mazeSize.y
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1859625954534075390, guid: 8b17ff37c9fa1a543b53a604dcde27c1, type: 3}
       propertyPath: numberLayers

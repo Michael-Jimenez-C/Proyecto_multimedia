@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,12 @@ public class menuActions : MonoBehaviour
     SceneLoader sceneLoader;
     void Start()
     {
+        GameObject.Find("LoadingScreen").SetActive(true);
+        StartCoroutine(DelayedStart());
+    }
+
+    IEnumerator DelayedStart(){
+        yield return new WaitForSeconds(0.2f);
         //Set player settings for title screen
         player = GameObject.FindWithTag("Player");
         player.GetComponent<Jugador>().gravityMultiplier = 0;
@@ -15,8 +22,10 @@ public class menuActions : MonoBehaviour
         //Shows cursor and hides settings menu
         player.GetComponentInChildren<Camera>().GetComponent<Camara>().ShowCursor();
         GameObject.Find("SettingsMenu")?.SetActive(false);
-        //Scen Loader Instance
+        //Scene Loader Instance
         sceneLoader = GameObject.Find("GameManager").GetComponent<SceneLoader>();
+        //Ends Loading Screen
+        GameObject.Find("LoadingScreen").SetActive(false);
     }
 
     public void NewGame()

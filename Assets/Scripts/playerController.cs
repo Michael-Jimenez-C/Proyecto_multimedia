@@ -7,6 +7,7 @@ using UnityEngine;
 public class Jugador : MonoBehaviour
 {
 	public CharacterController playerCharacterController;
+	KeyBindings keyBidings;
 	float groundOffset = 0.1f;
 	float baseSpeed = 6f;
 	public float runSpeedMultiplier = 1.8f;
@@ -21,13 +22,30 @@ public class Jugador : MonoBehaviour
 		playerCharacterController = GetComponent<CharacterController>();
 		StartCoroutine(GroundDetection());
 		playerVelocity = Vector3.zero;
+		keyBidings = GameObject.Find("GameManager").GetComponent<KeyBindings>();
 	}
 	void Update()
 	{
 		//Movimiento Horizontal
-		float movementAxisX = Input.GetAxis("Horizontal");
-		float movementAxisZ = Input.GetAxis("Vertical");
-		if (Input.GetKey(KeyCode.LeftShift) && movementAxisZ > 0)
+		float movementAxisX = 0f;
+		float movementAxisZ = 0f;
+		if (Input.GetKey(keyBidings.forward))
+		{
+			movementAxisZ = 1f;
+		}
+		if (Input.GetKey(keyBidings.backward))
+		{
+			movementAxisZ = -1f;
+		}
+		if (Input.GetKey(keyBidings.right))
+		{
+			movementAxisX = 1f;
+		}
+		if (Input.GetKey(keyBidings.left))
+		{
+			movementAxisX = -1f;
+		}
+		if (Input.GetKey(keyBidings.run) && movementAxisZ > 0)
 		{
 			movementAxisZ *= runSpeedMultiplier;
 		}
@@ -39,7 +57,7 @@ public class Jugador : MonoBehaviour
 		//Movimiento Vertical
 		if (grounded)
 		{
-			if (Input.GetKey(KeyCode.Space))
+			if (Input.GetKey(keyBidings.jump))
 			{
 				transform.position += Vector3.up * (groundOffset + 0.1f);
 				grounded = false;
@@ -66,9 +84,12 @@ public class Jugador : MonoBehaviour
 			RaycastHit groundHit;
 			if (Physics.Raycast(footPosition, -Vector3.up, out groundHit, groundOffset))
 			{
-				if (groundHit.transform.tag == "Floor"){
+				if (groundHit.transform.tag == "Floor")
+				{
 					grounded = true;
-				} else{
+				}
+				else
+				{
 					//Debug.Log(groundHit.transform.tag);
 				}
 			}
