@@ -50,7 +50,7 @@ public class levelGenerator : MonoBehaviour
             spawnPosition += new Vector3(0, 20, 0);
             player.GetComponent<Jugador>().Teleport(spawnPosition);
             player.GetComponent<Jugador>().gravityMultiplier = 1f;
-            StartCoroutine(removeLayer());
+            //StartCoroutine(removeLayer());
         }
         //Elimina el suelo de la meta para pasar al ultimo
         if (yIndex > 0)
@@ -91,8 +91,8 @@ public class levelGenerator : MonoBehaviour
             if (!sceneLoader.paused)
             {
                 currentLevelTime += 1;
-                yield return new WaitForSeconds(1);
             }
+            yield return new WaitForSeconds(1);
         }
     }
 }
