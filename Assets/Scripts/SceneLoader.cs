@@ -7,6 +7,7 @@ public class SceneLoader : MonoBehaviour
 {
     public GameObject generator;
     public GameObject loadingScreen;
+    public bool paused = false;
     void Start(){
         loadingScreen = transform.Find("LoadingScreen").GameObject();
     }

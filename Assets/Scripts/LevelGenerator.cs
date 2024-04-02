@@ -13,6 +13,7 @@ public class levelGenerator : MonoBehaviour
     public Vector2Int mazeSize;
     //Capas
     public int numberLayers;
+    public int currentLevelTime = 0;
     List<mazeGenerator> layers = new List<mazeGenerator>();
 
     // Start is called before the first frame update
@@ -22,6 +23,7 @@ public class levelGenerator : MonoBehaviour
         for (int i = 0; i < numberLayers; i++)
         {
             StartCoroutine(CreateLayer(i, mazeSize));
+            StartCoroutine(CurrentTimer());
         }
     }
 
@@ -77,6 +79,20 @@ public class levelGenerator : MonoBehaviour
                 }
             }
             yield return new WaitForSeconds(1f);
+        }
+    }
+
+    IEnumerator CurrentTimer()
+    {
+        SceneLoader sceneLoader = GameObject.Find("GameManager").GetComponent<SceneLoader>();
+        currentLevelTime = 0;
+        while (true)
+        {
+            if (!sceneLoader.paused)
+            {
+                currentLevelTime += 1;
+                yield return new WaitForSeconds(1);
+            }
         }
     }
 }
