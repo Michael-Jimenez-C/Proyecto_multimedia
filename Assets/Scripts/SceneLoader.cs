@@ -17,7 +17,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadMaze(Vector2Int size, int layers)
     {
-        loadingScreen.SetActive(true);
+        //loadingScreen.SetActive(true);
         SceneManager.LoadScene("Maze");
         StartCoroutine(mazeLoadRoutine(size, layers));
     }
@@ -28,6 +28,6 @@ public class SceneLoader : MonoBehaviour
         currentGenerator.GetComponent<levelGenerator>().mazeSize = size;
         currentGenerator.GetComponent<levelGenerator>().numberLayers = layers;
         currentGenerator.GetComponent<levelGenerator>().StartLevel();
-        loadingScreen.SetActive(false);
+        //loadingScreen.SetActive(false);
     }
 }

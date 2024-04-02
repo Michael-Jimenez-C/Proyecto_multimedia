@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class maze_goal : MonoBehaviour
+public class MazeGoal : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    float rotationSpeed = 50f;
     void Update()
     {
-        
+        transform.GetChild(0).Rotate(Vector3.up * rotationSpeed * Time.deltaTime);
     }
 }

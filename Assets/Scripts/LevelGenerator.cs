@@ -8,7 +8,7 @@ public class levelGenerator : MonoBehaviour
     //Obtiene el prefab del nodo
     public mazeGenerator generatorPrefab;
     //Prefab de la meta
-    public maze_goal mazeGoal;
+    public MazeGoal mazeGoal;
     //Tamaño
     public Vector2Int mazeSize;
     //Capas
@@ -45,8 +45,9 @@ public class levelGenerator : MonoBehaviour
             {
                 spawnPosition = layer.GetRandomNode().transform.position;
             } while (spawnPosition == layer.goalNode.transform.position);
-            player.transform.position = spawnPosition + Vector3.up * 10f;
-            player.GetComponent<Jugador>().gravityMultiplier=1f;
+            spawnPosition += new Vector3(0, 20, 0);
+            player.GetComponent<Jugador>().Teleport(spawnPosition);
+            player.GetComponent<Jugador>().gravityMultiplier = 1f;
             StartCoroutine(removeLayer());
         }
         //Elimina el suelo de la meta para pasar al ultimo
@@ -56,7 +57,7 @@ public class levelGenerator : MonoBehaviour
         }
         else
         {
-            maze_goal goal = Instantiate(mazeGoal, layer.goalNode.transform.position, Quaternion.identity);
+            MazeGoal goal = Instantiate(mazeGoal, layer.goalNode.transform.position, Quaternion.identity);
         }
     }
     IEnumerator removeLayer()
