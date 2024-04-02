@@ -18,7 +18,4 @@ public class PlayerSingleton : MonoBehaviour
         }
         Instance.currentScene = SceneManager.GetActiveScene();
     }
-    public void GoToScene(string sceneName){
-        SceneManager.LoadScene(sceneName);
-    }
 }
