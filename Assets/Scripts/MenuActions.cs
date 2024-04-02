@@ -5,18 +5,20 @@ using UnityEngine.SceneManagement;
 public class menuActions : MonoBehaviour
 {
     GameObject player;
+
     SceneLoader sceneLoader;
     void Start()
     {
-        GameObject.Find("LoadingScreen").SetActive(true);
+        GameObject.Find("GameManager").GetComponent<SceneLoader>().loadingScreen.SetActive(true);
+        player = GameObject.FindWithTag("Player");
         StartCoroutine(DelayedStart());
     }
 
     IEnumerator DelayedStart(){
         yield return new WaitForSeconds(0.2f);
         //Set player settings for title screen
-        player = GameObject.FindWithTag("Player");
         player.GetComponent<Jugador>().gravityMultiplier = 0;
+        player.GetComponent<Jugador>().grounded = true;
         player.GetComponent<playerUIController>().HideHUD();
         player.GetComponent<playerUIController>().HideMenu();
         //Shows cursor and hides settings menu
@@ -25,13 +27,12 @@ public class menuActions : MonoBehaviour
         //Scene Loader Instance
         sceneLoader = GameObject.Find("GameManager").GetComponent<SceneLoader>();
         //Ends Loading Screen
-        GameObject.Find("LoadingScreen").SetActive(false);
+        GameObject.Find("GameManager").GetComponent<SceneLoader>().loadingScreen.SetActive(false);
     }
 
     public void NewGame()
     {
-        sceneLoader.LoadMaze();
-        player.GetComponent<Jugador>().gravityMultiplier = 1;
+        sceneLoader.LoadMaze(new Vector2Int(4,4),1);
         player.GetComponentInChildren<Camera>().GetComponent<Camara>().HideCursor();
         player.GetComponent<playerUIController>().ShowHUD();
         player.GetComponent<playerUIController>().HideMenu();

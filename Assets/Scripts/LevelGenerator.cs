@@ -16,7 +16,7 @@ public class levelGenerator : MonoBehaviour
     List<mazeGenerator> layers = new List<mazeGenerator>();
 
     // Start is called before the first frame update
-    void Start()
+    public void StartLevel()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         for (int i = 0; i < numberLayers; i++)
@@ -45,7 +45,8 @@ public class levelGenerator : MonoBehaviour
             {
                 spawnPosition = layer.GetRandomNode().transform.position;
             } while (spawnPosition == layer.goalNode.transform.position);
-            player.transform.position = spawnPosition;
+            player.transform.position = spawnPosition + Vector3.up * 10f;
+            player.GetComponent<Jugador>().gravityMultiplier=1f;
             StartCoroutine(removeLayer());
         }
         //Elimina el suelo de la meta para pasar al ultimo
