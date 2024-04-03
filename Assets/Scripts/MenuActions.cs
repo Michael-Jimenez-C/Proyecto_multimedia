@@ -14,7 +14,8 @@ public class menuActions : MonoBehaviour
         StartCoroutine(DelayedStart());
     }
 
-    IEnumerator DelayedStart(){
+    IEnumerator DelayedStart()
+    {
         yield return new WaitForSeconds(0.2f);
         //Set player settings for title screen
         player.GetComponent<Jugador>().gravityMultiplier = 0;
@@ -32,7 +33,7 @@ public class menuActions : MonoBehaviour
 
     public void NewGame()
     {
-        sceneLoader.LoadMaze(new Vector2Int(4,4),1);
+        sceneLoader.LoadMaze(new Vector2Int(4, 4), 1);
         player.GetComponentInChildren<Camera>().GetComponent<Camara>().HideCursor();
         player.GetComponent<playerUIController>().ShowHUD();
         player.GetComponent<playerUIController>().HideMenu();

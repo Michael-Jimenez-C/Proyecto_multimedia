@@ -9,6 +9,8 @@ public class levelGenerator : MonoBehaviour
     public mazeGenerator generatorPrefab;
     //Prefab de la meta
     public MazeGoal mazeGoal;
+    //Prefab del trampolin
+    public GameObject trampolin;
     //Tamaño
     public Vector2Int mazeSize;
     //Capas
@@ -52,10 +54,22 @@ public class levelGenerator : MonoBehaviour
             player.GetComponent<Jugador>().gravityMultiplier = 1f;
             //StartCoroutine(removeLayer());
         }
-        //Elimina el suelo de la meta para pasar al ultimo
+        //Elimina el suelo de la meta para pasar a la siguiente capa
         if (yIndex > 0)
         {
+            List<Vector3> removedPositions = new();
             layer.goalNode.RemoveFloor();
+            //TODO: comporobar que haya suelo para instanciar y comprobar que no sea la meta
+            Instantiate(trampolin,layer.goalNode.transform.position - Vector3.up * 6,Quaternion.identity);
+            removedPositions.Add(layer.goalNode.transform.position);
+            for(int i=0; i< (layerSize.x+layerSize.y)/4; i++){
+                mazeNode accesNode = layer.GetRandomNode();
+                Vector3 accessPosition = accesNode.transform.position;
+                if (!removedPositions.Contains(accessPosition)){
+                    accesNode.RemoveFloor();
+                    Instantiate(trampolin,accesNode.transform.position - Vector3.up * 6,Quaternion.identity);
+                }
+            }
         }
         else
         {
