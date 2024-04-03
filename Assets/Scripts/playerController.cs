@@ -74,6 +74,7 @@ public class Jugador : MonoBehaviour
 		}
 
 		//Aplica movimiento
+		Physics.SyncTransforms();
 		playerCharacterController.Move(playerVelocity * Time.deltaTime);
 	}
 	IEnumerator GroundDetection()
@@ -99,5 +100,21 @@ public class Jugador : MonoBehaviour
 			}
 			yield return new WaitForSeconds(0.1f);
 		}
+	}
+	void OnTriggerEnter(Collider other)
+	{
+		if (other.transform.parent.CompareTag("Goal"))
+		{
+			Destroy(other.transform.parent.gameObject);
+			gravityMultiplier = 0f;
+			transform.position = transform.position+Vector3.up*20f;
+			playerVelocity = Vector3.zero;
+			Vector2Int oldSize = GameObject.Find("level_generator(Clone)").GetComponent<levelGenerator>().mazeSize;
+			int oldLayers = GameObject.Find("level_generator(Clone)").GetComponent<levelGenerator>().numberLayers;
+			GameObject.Find("GameManager").GetComponent<SceneLoader>().LoadMaze(new Vector2Int(oldSize.x+1, oldSize.y+1), oldLayers+1);
+		}
+	}
+	public void Teleport(Vector3 position){
+		transform.position = position;
 	}
 }

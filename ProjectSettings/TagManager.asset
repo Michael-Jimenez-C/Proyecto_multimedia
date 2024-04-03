@@ -7,6 +7,7 @@ TagManager:
   - Floor
   - Trampoline
   - MuroEscalable
+  - Goal
   layers:
   - Default
   - TransparentFX

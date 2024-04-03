@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 public class playerUIController : MonoBehaviour
 {
@@ -27,11 +29,13 @@ public class playerUIController : MonoBehaviour
     }
     public void HideMenu()
     {
+        GameObject.Find("GameManager").GetComponent<SceneLoader>().paused = false;
         SettingsMenu.SetActive(false);
         InGameMenu.SetActive(false);
     }
     public void ShowMenu()
     {
+        GameObject.Find("GameManager").GetComponent<SceneLoader>().paused = true;
         playerCamara.ShowCursor();
         InGameMenu.SetActive(true);
     }
@@ -72,6 +76,12 @@ public class playerUIController : MonoBehaviour
             {
                 HideSettings();
             }
+        }
+        if (HUD.activeSelf)
+        {
+            GameObject levelGenerator = GameObject.Find("level_generator(Clone)");
+            TimeSpan currentTime = levelGenerator ? TimeSpan.FromSeconds(levelGenerator.GetComponent<levelGenerator>().currentLevelTime) : TimeSpan.FromSeconds(0);
+            HUD.transform.Find("tiempo").GetComponent<Text>().text = string.Format("{0:D2}:{1:D2}:{2:D2}", currentTime.Hours, currentTime.Minutes, currentTime.Seconds);
         }
     }
 }
