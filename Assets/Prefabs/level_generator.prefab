@@ -47,6 +47,7 @@ MonoBehaviour:
   generatorPrefab: {fileID: 3099283450666355176, guid: 8a4b8b300b9a1af4c893567e99eb76b0, type: 3}
   mazeGoal: {fileID: 1796759443409627810, guid: 43364f41e94945342a1e605aa6f5ac2e, type: 3}
   trampolin: {fileID: 5969256686941713632, guid: e03d2f17b748afa4388f72b83aaca715, type: 3}
+  turret: {fileID: 1161694616998003153, guid: fa12d97e1e279a61391b1292ba7a7352, type: 3}
   mazeSize: {x: 1, y: 1}
   numberLayers: 1
   currentLevelTime: 0

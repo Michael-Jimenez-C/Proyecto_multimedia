@@ -11,6 +11,8 @@ public class levelGenerator : MonoBehaviour
     public MazeGoal mazeGoal;
     //Prefab del trampolin
     public GameObject trampolin;
+    //Prefab Torretas
+    public GameObject turret;
     //Tamaño
     public Vector2Int mazeSize;
     //Capas
@@ -34,6 +36,7 @@ public class levelGenerator : MonoBehaviour
         //Crea un generador de laberinto
         Vector3 generatorPosition = new Vector3(0, yIndex * 4, 0);
         mazeGenerator layer = Instantiate(generatorPrefab, generatorPosition, Quaternion.identity);
+        List<Vector3> removedPositions = new();
         layers.Add(layer);
         layer.mazeSize = layerSize;
         //Espera a que termine de generarse
@@ -57,23 +60,34 @@ public class levelGenerator : MonoBehaviour
         //Elimina el suelo de la meta para pasar a la siguiente capa
         if (yIndex > 0)
         {
-            List<Vector3> removedPositions = new();
             layer.goalNode.RemoveFloor();
-            //TODO: comporobar que haya suelo para instanciar y comprobar que no sea la meta
-            Instantiate(trampolin,layer.goalNode.transform.position - Vector3.up * 6,Quaternion.identity);
             removedPositions.Add(layer.goalNode.transform.position);
-            for(int i=0; i< (layerSize.x+layerSize.y)/4; i++){
+            //TODO: comporobar que haya suelo para instanciar y comprobar que no sea la meta
+            Instantiate(trampolin, layer.goalNode.transform.position - Vector3.up * 6, Quaternion.identity);
+            for (int i = 0; i < (layerSize.x + layerSize.y) / 4; i++)
+            {
                 mazeNode accesNode = layer.GetRandomNode();
                 Vector3 accessPosition = accesNode.transform.position;
-                if (!removedPositions.Contains(accessPosition)){
+                if (!removedPositions.Contains(accessPosition))
+                {
                     accesNode.RemoveFloor();
-                    Instantiate(trampolin,accesNode.transform.position - Vector3.up * 6,Quaternion.identity);
+                    Instantiate(trampolin, accesNode.transform.position - Vector3.up * 6, Quaternion.identity);
                 }
             }
         }
         else
         {
             MazeGoal goal = Instantiate(mazeGoal, layer.goalNode.transform.position, Quaternion.identity);
+        }
+        //Spawn Torretas
+        for (int i = 0; i < (layerSize.x + layerSize.y) / 4; i++)
+        {
+            Vector3 turretPosition = layer.GetRandomNode().transform.position;
+            if (!removedPositions.Contains(turretPosition) || turretPosition == layer.goalNode.transform.position)
+            {
+                GameObject turretInstance = Instantiate(turret, turretPosition-Vector3.up * 1f, Quaternion.identity);
+                turretInstance.GetComponent<Enemigo>().player = player.transform;
+            }
         }
     }
     IEnumerator removeLayer()
