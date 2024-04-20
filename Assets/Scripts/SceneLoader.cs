@@ -2,14 +2,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class SceneLoader : MonoBehaviour
 {
     public GameObject generator;
     public GameObject loadingScreen;
     public bool paused = false;
+    public Text nombre_jugador;
     void Start(){
         loadingScreen = transform.Find("LoadingScreen").GameObject();
+	nombre_jugador.text=PlayerPrefs.GetString("PlayerName");
     }
     public void LoadTitleScreen()
     {
